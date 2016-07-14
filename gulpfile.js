@@ -27,7 +27,9 @@ gulp.task('serve', ['sass'], function () {
         // root folder
         server: "./app",
         // used port
-        port: 8181
+        port: 8181,
+        // browsers you want to open the project with
+        browser: "Chrome Canary"
     });
 
 });
