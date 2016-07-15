@@ -29,7 +29,7 @@ gulp.task('serve', ['sass'], function () {
         // used port
         port: 8181,
         // browsers you want to open the project with
-        browser: "Chrome Canary"
+        browser: "Google Chrome Canary"
     });
 
 });
