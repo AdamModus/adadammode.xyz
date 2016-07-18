@@ -2,9 +2,18 @@
 
 // What should I cache?
 var urlsToCache = [
+    // js assets
     'js/offline-main.js',
-    'js/db-layer.js',
+    'js/main.js',
+    'js/IndexedDBLayer.js',
+    'js/TodoListDB.js',
+    'js/external/cards.js',
+    'js/external/vanillatoasts.js',
+    // css assets
     'style/css/main.css',
+    'style/external/cards.css',
+    'style/external/vanillatoasts.css',
+    // img assets
     'imgs/south-park.jpg'
 ];
 
