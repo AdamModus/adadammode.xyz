@@ -18,7 +18,7 @@ var urlsToCache = [
 ];
 
 // Cache name - should be changed whenever significant changes are made
-var version = 1;
+var version = 2;
 var getISODate = () => {
     return new Date().toISOString().split('T')[0];
 };

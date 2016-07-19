@@ -1,4 +1,5 @@
 let TodoListDB = (function () {
+    const dbVersion = 2;
     const schema = {
         id: "01",
         name: "Rafael",
@@ -16,11 +17,13 @@ let TodoListDB = (function () {
         {
             'idxName': 'email',
             'attrName': 'email',
-            'isUnique': true
+            'isUnique': false
         }
     ];
     const idbLayer = Symbol('idbLayer');
     const storeName = Symbol('storeName'); // database name
+
+    // indexedDB.deleteDatabase("TODOListStore")
 
     class TodoListDB {
         constructor() {
@@ -29,7 +32,7 @@ let TodoListDB = (function () {
 
         init() {
             var self = this;
-            var openDBRequest = window.indexedDB.open(this[storeName]);
+            var openDBRequest = window.indexedDB.open(this[storeName], dbVersion);
             return new Promise(function (resolve, reject) {
                 openDBRequest.onerror = function (event) {
                     console.log("Why didn't you allow my web app to use IndexedDB?!");
@@ -59,7 +62,7 @@ let TodoListDB = (function () {
 
                     // Create all the indexes
                     // Careful the index name, attribute name and uniqueness
-                    for (let idx in indexes) {
+                    for (let idx of indexes) {
                         todoStore.createIndex(idx.idxName, idx.attrName, {unique: idx.isUnique});
                     }
 

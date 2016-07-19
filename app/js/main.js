@@ -1,3 +1,5 @@
+var todoList;
+
 function generateCardHTML(todoJson) {
     var elem = document.createElement('div');
     elem.className = "card";
@@ -33,36 +35,19 @@ function addCard(todo) {
 
 var dbManager = new TodoListDB();
 dbManager.init().then(function () {
-    dbManager.addTodo({
-        id: "01",
-        name: "Rafael",
-        status: "TODO",
-        text: "I need to do stuff bro!",
-        email: "rafatexfr@gmail.com",
-        dateTime: '05-03-1988'
-    }).then(function (result) {
-        addCard(result);
-    }).catch(function (error) {
+    dbManager.list().then(function (result) {
+        todoList = result;
+        populateCards(result);
+    }, function (error) {
         VanillaToasts.create({
-            title: 'TODO not added',
+            title: 'Not able to list TODOs',
             text: error.target.error, // little text with error log
             type: 'error', // success, info, warning, error   / optional parameter
             timeout: 3000, // hide after 5000ms, // optional paremter
             callback: Function.prototype // executed when toast is clicked / optional parameter
         });
-    }).then(function () {
-        dbManager.list().then(function (result) {
-            populateCards(result);
-        }, function (error) {
-            VanillaToasts.create({
-                title: 'Not able to list TODOs',
-                text: error.target.error, // little text with error log
-                type: 'error', // success, info, warning, error   / optional parameter
-                timeout: 3000, // hide after 5000ms, // optional paremter
-                callback: Function.prototype // executed when toast is clicked / optional parameter
-            });
-        });
     });
+
 });
 
 
@@ -86,4 +71,37 @@ document.getElementById("CleanDB").onclick = function () {
             callback: Function.prototype // executed when toast is clicked / optional parameter
         });
     });
+};
+
+document.getElementById("createTODO").onsubmit = function (evt) {
+    evt.preventDefault();
+
+    var form = document.getElementById('createTODO');
+    var inputs = form.querySelectorAll('input[type="text"');
+    var todoJson = {
+        id: todoList.length,
+        name: inputs[0].value,
+        status: "TODO",
+        text: inputs[1].value,
+        email: inputs[2].value,
+        dateTime: (() => {
+            var curr = new Date().toISOString().split('T');
+            return curr[0] + ' ' + curr[1].substring(0, 8);
+        })()
+    };
+
+    dbManager.addTodo(todoJson).then(function (result) {
+        addCard(todoJson);
+        todoList.push(todoJson);
+    }).catch(function (error) {
+        VanillaToasts.create({
+            title: 'TODO not added',
+            text: error.target.error, // little text with error log
+            type: 'error', // success, info, warning, error   / optional parameter
+            timeout: 3000, // hide after 5000ms, // optional paremeter
+            callback: Function.prototype // executed when toast is clicked / optional parameter
+        });
+    });
+
+    return false;
 };
