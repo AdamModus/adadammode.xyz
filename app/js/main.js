@@ -1,4 +1,4 @@
-var todoList;
+var todoList = [];
 
 function generateCardHTML(todoJson) {
     var elem = document.createElement('div');

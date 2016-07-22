@@ -18,7 +18,7 @@ var urlsToCache = [
 ];
 
 // Cache name - should be changed whenever significant changes are made
-var version = 2;
+var version = 1;
 var getISODate = () => {
     return new Date().toISOString().split('T')[0];
 };
@@ -67,6 +67,16 @@ self.addEventListener('activate', function (event) {
     console.log(`You're good to go!`);
 });
 
+var deleteAllCache = function () {
+    var cacheWhitelist = `this should never be a cache name!!! this thing cost me way too much time!!`;
+    caches.keys().then(function (keyList) {
+        return Promise.all(keyList.map(function (key) {
+            if (cacheWhitelist.indexOf(key) === -1) {
+                return caches.delete(key);
+            }
+        }));
+    });
+}
 
 var doesRequestAcceptHtml = function (request) {
     return request.headers.get('Accept')
